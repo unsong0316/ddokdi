@@ -1,21 +1,13 @@
 {
-  "name": "ddokdi",
+  "name": "practice",
   "version": "1.0.0",
-  "description": "ddokdi prototype",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/unsong0316/ddokdi.git"
-  },
-  "author": "Unsong_Choe",
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/unsong0316/ddokdi/issues"
-  },
-  "homepage": "https://github.com/unsong0316/ddokdi#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
