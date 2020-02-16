@@ -19,6 +19,7 @@ var router = express.Router();
 //router.post('/register', login.register);
 router.post("/register", (req, res) => {
     let params = req.body;
+    res.send("정글북");
     console.log(params);
  });
 router.post('/login', login.login);
