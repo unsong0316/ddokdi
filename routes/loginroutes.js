@@ -41,8 +41,8 @@ exports.register = function(req,res){
     });
   }
 exports.login = function(req,res){
-   var email= req.body.email;
-   var password = req.body.password;
+   var id= req.body.id;
+   var passwords = req.body.passwords;
    connection.query('SELECT * FROM user WHERE id = ?',[id], function (error, results, fields) {
    if (error) {
      // console.log("error ocurred",error);
@@ -69,7 +69,7 @@ exports.login = function(req,res){
      else{
        res.send({
          "code":204,
-         "success":"Email does not exits"
+         "success":"id does not exits"
            });
      }
    }

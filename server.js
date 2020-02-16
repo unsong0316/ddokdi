@@ -14,18 +14,13 @@ app.use(function(req, res, next) {
     next();
 });
 
-
 var router = express.Router();
 
-
-// test route
-/*router.get('/', function(req, res) {
-    res.json({ message: 'welcome to our upload module apis' });
-});
-*/
-
-// route to handle user registration
-router.post('/register', login.register);
+//router.post('/register', login.register);
+router.post("/register", (req, res) => {
+    let params = req.body;
+    console.log(params);
+ });
 router.post('/login', login.login);
 app.use('/api', router);
 app.listen(5000);
