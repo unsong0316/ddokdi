@@ -14,15 +14,15 @@ if(!err) {
 });
 exports.register = function(req,res){
     // console.log("req",req.body);
-    var today = new Date();
-    var users={
+    //var today = new datetime();
+    var user={
       "name":req.body.name,
       "id":req.body.id,
       "passwords":req.body.passwords,
       "gender":req.body.gender,
       "age": req.body.age,
-      "admin":req.body.admin,
-      "timestamp":req.body.timestamp
+      "admin":req.body.admin
+      //"timestamp":today
     }
     connection.query('INSERT INTO user SET ?',user, function (error, results, fields) {
     if (error) {
