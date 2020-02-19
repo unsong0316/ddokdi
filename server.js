@@ -1,9 +1,9 @@
 var express = require("express");
-var login = require('./routes/loginroutes.js');
+var login = require('./routes/loginroutes');
 var greeting = require('./routes/greeting');
+var drug_management = require('./routes/drug_management');
 var bodyParser = require('body-parser');
-var mysqlTimestamp = require(moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'));
-
+// var checking_duplication = require('./routes/loginroutes');
 var app = express();
 app.use( bodyParser.urlencoded({ extended: true }) );
 app.use( bodyParser.json() );
@@ -17,7 +17,8 @@ app.use(function(req, res, next) {
 
 var router = express.Router();
 
-router.post('/register', login.register);
+router.post('/register', login.checking_duplication)
+// router.post('/register', login.register);
 // router.post("/register", (req, res) => {
 //     let params = req.body;
 //     res.send("good");
@@ -36,5 +37,6 @@ router.post('/greeting', greeting.greeting)
 //     res.send("hi");
 //     console.log(params);
 //  });
+router.post('/drug_management', drug_management.drug_management)
 app.use('/api', router);
 app.listen(5000);
