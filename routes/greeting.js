@@ -1,6 +1,5 @@
 var mysql = require('mysql');
 var moment = require('moment');
-moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
 //var moment = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
 var connection = mysql.createConnection({
   host     : 'localhost',
@@ -21,7 +20,7 @@ exports.greeting= function(req,res){
     "greeting_USERID":req.body.payload.greeting_USERID,
     "mood":req.body.payload.mood,
     "message":req.body.payload.message,
-    "timestamp": moment
+    "timestamp": moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
   }
 //   var value = 0;
 //   var query = `SELECT * FROM table where greeting_USERID = ${req.body.payload.message}`;

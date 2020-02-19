@@ -1,7 +1,5 @@
 var mysql      = require('mysql');
-var moment = require('moment');
-moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
-//var moment = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
+//var moment = require('moment');
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -17,10 +15,10 @@ if(!err) {
 });
 
 exports.drug_management = function(req,res){
-  var greeting={
+  var drug_management ={
     "drug_management_USERID":req.body.payload.drug_management_USERID,
     "drug_name":req.body.payload.drug_name,
-    "time": moment
+    "time": req.body.payload.time
   }
 //   var value = 0;
 //   var query = `SELECT * FROM table where greeting_USERID = ${req.body.payload.message}`;
