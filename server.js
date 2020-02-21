@@ -2,6 +2,7 @@ var express = require("express");
 var login = require('./routes/loginroutes');
 var greeting = require('./routes/greeting');
 var drug_management = require('./routes/drug_management');
+var eventboard = require('./routes/eventboard');
 var bodyParser = require('body-parser');
 // var checking_duplication = require('./routes/loginroutes');
 var app = express();
@@ -17,7 +18,7 @@ app.use(function(req, res, next) {
 
 var router = express.Router();
 
-router.post('/register', login.checking_duplication)
+router.post('/register', login.checking_duplication);
 // router.post('/register', login.register);
 // router.post("/register", (req, res) => {
 //     let params = req.body;
@@ -31,12 +32,13 @@ router.post('/login', login.login);
 //     res.send("hi");
 //     console.log(params);
 //  });
-router.post('/greeting', greeting.greeting)
+router.post('/greeting', greeting.greeting);
 // router.post("/greeting", (req, res) => {
 //     let params = req.body;
 //     res.send("hi");
 //     console.log(params);
 //  });
-router.post('/drug_management', drug_management.drug_management)
+router.post('/drug_management', drug_management.drug_management);
+router.post('/eventboard', eventboard.event_register);
 app.use('/api', router);
 app.listen(5000);
