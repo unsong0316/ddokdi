@@ -27,7 +27,7 @@ router.post('/drug_list', drug_management.show_drug_list); //복용 약 리스�
 router.post('/eventboard_regi', eventboard_regi.event_register); //이벤트 등록
 router.post('/a_event_list', event.event_a_list); //all(전체)
 //router.post('/j_event_list', event.event_j_list); //joining(참석표시)
-//router.post('/n_event_list', event.event_n_list); //new(새로운 행사,안읽음)
+router.post('/n_event_list', event.event_n_list); //new(새로운 행사,안읽음)
 router.post('/event_checking', event.event_checking);
 app.use('/api', router);
 app.listen(5000);

@@ -41,14 +41,39 @@ exports.event_register= function(req,res){
                     });
               }
               else{
-                  console.log('The solution is: ', results);
+                var default_value = "0"
+                var user_event_event_no = connection.query(`SELECT MAX(event_no) FROM event`);
+                var USERID = connection.query('SELECT USERID FROM user WHERE admin = 0');
+                var create_user_event_update={
+                      "user_event_USERID": USERID,
+                      "checking": default_value,
+                      "participation":default_value,
+                      "user_event_event_no": user_event_event_no
+                    }
+                connection.query('INSERT ALL INTO user_event SET ?', create_user_event_update, function (error, results, fields) {
+                  if (error) {
+                      console.log("error ocurred",error);
+                    res.send({
+                        "code":400,
+                        "failed":"error ocurred"
+                        }
+                        );
+                      }
+                  else {
+                    a ="create_user_event_update done!"
+                    res.send({
+                      a
+                    });
+                  }
+              console.log('The solution is: ', results);
               res.send({
                   "code":200,
                   "success":"event registered sucessfully"
                         });
-                  }
                   });
-              }
+                }
+           });
+          }
           else{
             console.log("error ocurred",error);
             res.send({

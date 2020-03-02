@@ -22,7 +22,7 @@ exports.event_a_list= function(req,res){
           console.log(error);
         }
         else{
-          results = event_list
+          event_list = results
           res.send({
             event_list
           });
@@ -45,7 +45,13 @@ exports.event_a_list= function(req,res){
 //       }
 //     );
 //     }
-// exports.event_n_list= function(req,res){
+exports.event_n_list= function(req,res){
+    var event_USERID = req.body.payload.USERID
+    connection.query('SELECT a.event_no, a.event_name, a.date, a.qualification, a.body, a.location, a.beneficial, a.etc, a.participaants, a.timestamp,b.user_event_USERID, b.user_event_event_no, b.checking FROM event a INNER JOIN user_event b ON a.event_no = b.user_event_event_no where user_event_USERID = ? and checking = NULL', event_USERID, 
+    function(error,results, fields){  
+        res.send({results});
+    });
+}
 //     connection.query('SELECT event_no, event_name FROM event', 
 //       function (error, results, fields){
 //         if (error){
@@ -85,6 +91,6 @@ exports.event_checking= function(req,res){
     );   
 }
 
-//connection.query('SELECT a.event_no, a.event_name, a.date, a.qualification, a.body, a.location, a.beneficial, a.etc, a.participaants, a.timestamp, b.user_event_no, b.user_event_USERID, b.user_event_event_no, b.checking FROM event a INNER JOIN user_event b ON a.event_no = b.user_event_event_no',admin, function(error,results, fields){  });
+//
 // var USERID = connection.quary
 //     connection.quary('UPDATE user_event SET checking = 1, user_event_USERID = USERID,  WHERE event_USERID = [USERID]');
