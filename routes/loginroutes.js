@@ -8,8 +8,8 @@ var connection = mysql.createConnection({
   password : 'song',
   database : 'ddokdi_db'
 });
-connection.connect(function(err){
-if(!err) {
+connection.connect(function(error){
+if(!error) {
     console.log("user is connected ... nn");
 } else {
     console.log("Error connecting user database ... nn");
@@ -19,9 +19,9 @@ if(!err) {
 exports.checking_duplication = function(req,res){
   var idc = req.body.payload.id;
   connection.query('SELECT * FROM user WHERE id = ?',idc,
-    function(err, results){
-      if (err){
-        console.log(err);
+    function(error, results){
+      if (error){
+        console.log(error);
       }
       else{
         if(results.length > 0){

@@ -6,8 +6,8 @@ var connection = mysql.createConnection({
   password : 'song',
   database : 'ddokdi_db'
 });
-connection.connect(function(err){
-if(!err) {
+connection.connect(function(error){
+if(!error) {
     console.log("drug_management is connected ... nn");
 } else {
     console.log("Error connecting drug_management database ... nn");
@@ -40,3 +40,20 @@ exports.drug_management = function(req,res){
     });
   
 }
+// 약복용 리스트 약종류(tinyint(1)),복용시간(tinyint(1)),
+exports.show_drug_list= function(req,res){
+  var drug_management_USERID = req.body.payload.drug_management_USERID
+  connection.query('SELECT drug_name, time FROM drug_management where drug_management_USERID = ?',drug_management_USERID, 
+    function (error, results, fields){
+      if (error){
+        console.log(error);
+      }
+      else{
+        results = drug_list
+        res.send({
+          drug_list
+        });
+      }
+    }
+  );
+  }

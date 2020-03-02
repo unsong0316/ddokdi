@@ -7,8 +7,8 @@ var connection = mysql.createConnection({
   password : 'song',
   database : 'ddokdi_db'
 });
-connection.connect(function(err){
-if(!err) {
+connection.connect(function(error){
+if(!error) {
     console.log("event is connected ... nn");
 } else {
     console.log("Error connecting greeting database ... nn");
@@ -18,7 +18,7 @@ if(!err) {
 exports.event_register= function(req,res){
   var event_admin = req.body.payload.event_admin;
     connection.query('SELECT USERID FROM user WHERE admin = 1 and USERID = ?',event_admin,
-      function(err, results){
+      function(error, results){
           if(results.length > 0){
             var event_register={
               "event_name":req.body.payload.event_name,
@@ -32,9 +32,9 @@ exports.event_register= function(req,res){
               "timestamp": moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
               "event_admin":req.body.payload.event_admin
             }
-            connection.query('INSERT INTO event SET ?',event_register, function (err, results, fields) {
-              if (err) {
-                  console.log("error ocurred",err);
+            connection.query('INSERT INTO event SET ?',event_register, function (error, results, fields) {
+              if (error) {
+                  console.log("error ocurred",error);
                 res.send({
                     "code":400,
                     "failed":"error ocurred"
@@ -50,7 +50,7 @@ exports.event_register= function(req,res){
                   });
               }
           else{
-            console.log("error ocurred",err);
+            console.log("error ocurred",error);
             res.send({
               "code":201,
               "success":"not available"

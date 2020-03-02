@@ -7,8 +7,8 @@ var connection = mysql.createConnection({
   password : 'song',
   database : 'ddokdi_db'
 });
-connection.connect(function(err){
-if(!err) {
+connection.connect(function(error){
+if(!error) {
     console.log("greeting is connected ... nn");
 } else {
     console.log("Error connecting greeting database ... nn");
