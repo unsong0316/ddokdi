@@ -41,36 +41,47 @@ exports.event_register= function(req,res){
                     });
               }
               else{
-                var default_value = "0"
+                var default_value = 0
                 var user_event_event_no = connection.query(`SELECT MAX(event_no) FROM event`);
-                var USERID = connection.query('SELECT USERID FROM user WHERE admin = 0');
-                var create_user_event_update={
-                      "user_event_USERID": USERID,
-                      "checking": default_value,
-                      "participation":default_value,
-                      "user_event_event_no": user_event_event_no
-                    }
-                connection.query('INSERT ALL INTO user_event SET ?', create_user_event_update, function (error, results, fields) {
-                  if (error) {
-                      console.log("error ocurred",error);
-                    res.send({
-                        "code":400,
-                        "failed":"error ocurred"
+
+                // 유저 수 가져오기
+                var user_count = connection.query('SELECT COUNT(*) FROM user WHERE admin = 0');
+
+                // 유저 수 만큼 user_event에 값 넣기
+                // var i = 0
+                for(var i=1; i<user_count; i++){
+                  //해당 유저 ID 가져오기
+                  var USERID = connection.query('SELECT USERID FROM user WHERE admin = 0');
+                  
+                  var create_user_event_update={
+                        "user_event_USERID": USERID,
+                        "checking": default_value,
+                        "participation":default_value,
+                        "user_event_event_no": user_event_event_no
+                      }                
+                  // user_event에 값 넣기
+                  connection.query('INSERT INTO user_event SET ?', create_user_event_update, function (error, results, fields) {
+                    if (error) {
+                        console.log("error ocurred",error);
+                      res.send({
+                          "code":400,
+                          "failed":"error ocurred"
+                          }
+                          );
                         }
-                        );
-                      }
-                  else {
-                    a ="create_user_event_update done!"
-                    res.send({
-                      a
-                    });
+                    else {
+                      a ="create_user_event_update done!"
+                      res.send({
+                        a
+                      });
+                    }
+                  console.log('The solution is: ', results);
+                  res.send({
+                      "code":200,
+                      "success":"event registered sucessfully"
+                            });
+                      });
                   }
-              console.log('The solution is: ', results);
-              res.send({
-                  "code":200,
-                  "success":"event registered sucessfully"
-                        });
-                  });
                 }
            });
           }
@@ -84,8 +95,55 @@ exports.event_register= function(req,res){
         }
         );
       }
+      //           var default_value = "0"
+      //           var user_event_event_no = connection.query(`SELECT MAX(event_no) FROM event`);
+      //           var USERID = connection.query('SELECT USERID FROM user WHERE admin = 0');
+      //           var create_user_event_update={
+      //                 "user_event_USERID": USERID,
+      //                 "checking": default_value,
+      //                 "participation":default_value,
+      //                 "user_event_event_no": user_event_event_no
+      //               }
+      //           connection.query('INSERT ALL INTO user_event SET ?', create_user_event_update, function (error, results, fields) {
+      //             if (error) {
+      //                 console.log("error ocurred",error);
+      //               res.send({
+      //                   "code":400,
+      //                   "failed":"error ocurred"
+      //                   }
+      //                   );
+      //                 }
+      //             else {
+      //               a ="create_user_event_update done!"
+      //               res.send({
+      //                 a
+      //               });
+      //             }
+      //         console.log('The solution is: ', results);
+      //         res.send({
+      //             "code":200,
+      //             "success":"event registered sucessfully"
+      //                   });
+      //             });
+      //           }
+      //      });
+      //     }
+      //     else{
+      //       console.log("error ocurred",error);
+      //       res.send({
+      //         "code":201,
+      //         "success":"not available"
+      //       });
+      //     }
+      //   }
+      //   );
+      // }
     
   
+
+
+
+
 // exports.event_register= function(req,res){
 //   var event_register={
 //     "event_name":req.body.payload.event_name,
