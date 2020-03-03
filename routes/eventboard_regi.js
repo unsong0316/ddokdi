@@ -52,13 +52,14 @@ exports.event_register= function(req,res){
                       "participation":default_value,
                       "user_event_event_no": EVENT_NO[0].EVENT_NO
                             }
-                    connection.query('INSERT INTO user_event(user_event_USERID) SELECT USERID as user_event_USERID FROM user WHERE admin=0', 
+//1,2한줄로 합쳐보자 나중에
+                    connection.query('INSERT INTO user_event(user_event_USERID) SELECT USERID as user_event_USERID FROM user WHERE admin=0', //1
                     function (error, results) {
                       if(error){return console.error(error);}
                       console.log(results)
                       // a = results
                       // res.send({a});
-                      connection.query('UPDATE user_event SET ? where checking is NULL and participation is NULL and user_event_event_no is NULL ', create_user_event_update,
+                      connection.query('UPDATE user_event SET ? where checking is NULL and participation is NULL and user_event_event_no is NULL ', create_user_event_update,//2
                       function(error,results){
                         if(error){return console.error(error);}
                         console.log(results)

@@ -69,24 +69,24 @@ exports.event_n_list= function(req,res){
 
 exports.event_checking= function(req,res){
     var checking = 1
-    var default_value = 0
-    var create_user_event_row={
-        "user_event_USERID":req.body.payload.USERID, //USERID
-        "checking": checking , //게시글 상세 조회 1(check)
-        "participation": default_value , //참석여부 초기값 0
-        "user_event_event_no":req.body.payload.user_event_event_no  //event table에 있는 게시글 고유번호(event_no)
-      }
-    connection.query('INSERT INTO user_event SET ?', create_user_event_row, 
+    // var USERID = {
+    //     "user_event_USERID":req.body.payload.USERID
+    // }
+    // var user_event_event_no = {
+    //     "user_event_event_no":req.body.payload.user_event_event_no    //event table에 있는 게시글 고유번호(event_no)
+    // }
+    var event_checking_row={
+        "checking": checking,  //게시글 상세 조회 1(check)
+        "user_event_event_no":req.body.payload.user_event_event_no,
+        "user_event_USERID":req.body.payload.USERID
+
+    }
+    connection.query('UPDATE user_event SET checking = ? WHERE (user_event_USERID = ?) AND (user_event_event_no = ?)', event_checking_row,
     function (error, results, fields){
         if (error){
           console.log(error);
         }
-        else{
-            a = "user_event updated successfully!"
-            res.send({
-                a
-            });
-        }
+        console.log(results);
       }
     );   
 }
