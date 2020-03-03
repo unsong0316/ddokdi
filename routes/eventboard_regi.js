@@ -46,46 +46,26 @@ exports.event_register= function(req,res){
                 var user_event_event_no = connection.query(`SELECT MAX(event_no) as EVENT_NO FROM event`, 
                   function (error, EVENT_NO) {
                     if(error) {return console.error(error);}
-                                   
-                    // console.log(EVENT_NO[0].EVENT_NO);
-                    // var user_count = connection.query('SELECT COUNT (USERID) as USER_NO FROM user WHERE admin = 0',  //유저 수 가져오기
-                    //   function(error,results){  
-                    //     if(error){return console.error(error);}
-                    //     USER_NO = results
-                    //     console.log(USER_NO);
-                    //     for(var i=0; i<USER_NO; i++){       //유저 수 만큼 user_event에 값넣기
-                    //       var USERID = connection.query('SELECT USERID FROM user as USERID WHERE admin = 0',  //해당 유저 ID 가져오기
-                    //       function(error,reuslts){   
-                    //         if(error){return console.error(error);}
-                    //         USERID = results
-                    //         console.log(USERID);
-                            var create_user_event_update={
-                              //"user_event_USERID": USERID,
-                              "checking": default_value,
-                              "participation":default_value,
-                              "user_event_event_no": EVENT_NO[0].EVENT_NO
+                    var create_user_event_update={
+                      // "user_event_USERID": USERID,
+                      "checking": default_value,
+                      "participation":default_value,
+                      "user_event_event_no": EVENT_NO[0].EVENT_NO
                             }
-                            connection.query('INSERT INTO user_event(user_event_USERID) SELECT USERID as user_event_USERID FROM user WHERE admin=0', 
-                            function (error, results) {
-                              if(error){return console.error(error);}
-                              console.log(results)
-                              // a = results
-                              // res.send({a});
-                              connection.query('UPDATE user_event SET ? where checking = NULL and participation = NULL and user_event_event_no = NULL ', create_user_event_update,
-                              function(error,results){
-                                if(error){return console.error(error);}
-                                console.log(results)
-                                
-                              });
-                            });
-                          });
-                        }  
-
-                  // }
-                  // );
-                // }
-                // );
-          // }
+                    connection.query('INSERT INTO user_event(user_event_USERID) SELECT USERID as user_event_USERID FROM user WHERE admin=0', 
+                    function (error, results) {
+                      if(error){return console.error(error);}
+                      console.log(results)
+                      // a = results
+                      // res.send({a});
+                      connection.query('UPDATE user_event SET ? where checking is NULL and participation is NULL and user_event_event_no is NULL ', create_user_event_update,
+                      function(error,results){
+                        if(error){return console.error(error);}
+                        console.log(results)
+                      });
+                    });
+                  });
+                }  
         }
         );
         }
