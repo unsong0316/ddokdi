@@ -4,8 +4,8 @@ var greeting = require('./routes/greeting');
 var drug_management = require('./routes/drug_management');
 var eventboard_regi = require('./routes/eventboard_regi');
 var event = require('./routes/event');
+var dashboard = require('./routes/dashboard');
 var bodyParser = require('body-parser');
-// var checking_duplication = require('./routes/loginroutes');
 var app = express();
 app.use( bodyParser.urlencoded({ extended: true }) );
 app.use( bodyParser.json() );
@@ -25,10 +25,12 @@ router.post('/greeting', greeting.greeting); //기분 체크
 router.post('/drug_management', drug_management.drug_management); //복용 약 등록
 router.post('/drug_list', drug_management.show_drug_list); //복용 약 리스트
 router.post('/eventboard_regi', eventboard_regi.event_register); //이벤트 등록
-router.post('/a_event_list', event.event_a_list); //all(전체)
-//router.post('/j_event_list', event.event_j_list); //joining(참석표시)
+router.post('/a_event_list', event.event_a_list); //all(행사 전체 리스트)
 router.post('/n_event_list', event.event_n_list); //new(새로운 행사,안읽음)
-router.post('/event_checking', event.event_checking);
+router.post('/d_event', event.event_d); //detail(행사 상세조회)
+router.post('/c_event', event.event_c); //checking(새로운 행사,안읽음)
+router.post('/j_event', event.event_j); //joining(참석표시)
+router.post('/j_event_count', event.event_j_count); //joining count(참석자 수)
 app.use('/api', router);
 app.listen(5000);
 

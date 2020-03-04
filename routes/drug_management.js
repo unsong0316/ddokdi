@@ -1,5 +1,4 @@
 var mysql      = require('mysql');
-//var moment = require('moment');
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -49,9 +48,8 @@ exports.show_drug_list= function(req,res){
         console.log(error);
       }
       else{
-        results = drug_list
         res.send({
-          drug_list
+          results
         });
       }
     }
