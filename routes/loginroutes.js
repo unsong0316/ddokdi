@@ -63,43 +63,7 @@ exports.checking_duplication = function(req,res){
   )
 }
 
-exports.register = function(req,res){
-    var user={
-      "USERID":req.body.payload.USERID,
-      "name":req.body.payload.name,
-      "id":req.body.payload.id,
-      "passwords":req.body.payload.passwords,
-      "gender":req.body.payload.gender,
-      "age": req.body.payload.age,
-      "admin":req.body.payload.admin,
-      "timestamp": moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
-    }
-    // connection.query('SELECT * FROM user WHERE id = ?',id, function (error, results){
-    //   if(results.length > 0){
-    //     res.send({
-    //     "code":201,
-    //     "failed":"already exist"
-    //         })
-    //       }
-    //   else{
-    connection.query('INSERT INTO user SET ?',user, function (error, results, fields) {
-      if (error) {
-        console.log("error ocurred",error);
-        res.send({
-          "code":400,
-          "failed":"error ocurred"
-        });
-      }else{
-        console.log('The solution is: ', results);
-        res.send({
-          "code":200,
-          "success":"user registered sucessfully"
-            });
-      }
-      });
-}
-  //   })  
-  // }
+
 exports.login = function(req,res){
    var id= req.body.payload.id;
    var passwords = req.body.payload.passwords;

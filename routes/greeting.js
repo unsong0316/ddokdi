@@ -25,7 +25,7 @@ exports.greeting= function(req,res){
 //   var value = 0;
 //   var query = `SELECT * FROM table where greeting_USERID = ${req.body.payload.message}`;
 
-  connection.query('INSERT INTO greeting SET ?',greeting, function (error, results, fields) {
+  connection.query('INSERT INTO greeting SET ?',greeting, function (error, results) {
     if (error) {
       console.log("error ocurred",error);
       res.send({
@@ -36,7 +36,7 @@ exports.greeting= function(req,res){
       console.log('The solution is: ', results);
       res.send({
         "code":200,
-        "success":"greeting registered sucessfully"
+        "mood": results
           });
     }
     });

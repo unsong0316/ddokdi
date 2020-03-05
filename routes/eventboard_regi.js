@@ -47,7 +47,6 @@ exports.event_register= function(req,res){
                   function (error, EVENT_NO) {
                     if(error) {return console.error(error);}
                     var create_user_event_update={
-                      // "user_event_USERID": USERID,
                       "checking": default_value,
                       "participation":default_value,
                       "user_event_event_no": EVENT_NO[0].EVENT_NO
@@ -62,7 +61,14 @@ exports.event_register= function(req,res){
                       connection.query('UPDATE user_event SET ? where checking is NULL and participation is NULL and user_event_event_no is NULL ', create_user_event_update,//2
                       function(error,results){
                         if(error){return console.error(error);}
-                        console.log(results)
+                        else{
+                          console.log(results)
+                          res.send({
+                            "code":200,
+                            "success":"event registered sucessfully"
+                          })
+                        
+                        }
                       });
                     });
                   });

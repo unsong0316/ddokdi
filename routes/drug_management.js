@@ -22,7 +22,7 @@ exports.drug_management = function(req,res){
 //   var value = 0;
 //   var query = `SELECT * FROM table where greeting_USERID = ${req.body.payload.message}`;
 
-  connection.query('INSERT INTO drug_management SET ?',drug_management, function (error, results, fields) {
+  connection.query('INSERT INTO drug_management SET ?',drug_management, function (error, results) {
     if (error) {
       console.log("error ocurred",error);
       res.send({
@@ -43,13 +43,14 @@ exports.drug_management = function(req,res){
 exports.show_drug_list= function(req,res){
   var drug_management_USERID = req.body.payload.drug_management_USERID
   connection.query('SELECT drug_name, time FROM drug_management where drug_management_USERID = ?',drug_management_USERID, 
-    function (error, results, fields){
+    function (error, results){
       if (error){
         console.log(error);
       }
       else{
         res.send({
-          results
+          "code":200,
+          "l_drug":results
         });
       }
     }

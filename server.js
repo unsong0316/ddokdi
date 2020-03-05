@@ -19,9 +19,10 @@ app.use(function(req, res, next) {
 
 var router = express.Router();
 
-router.post('/register', login.checking_duplication); //아이디 중복검사 및 회원 등록
+router.post('/register', login.checking_duplication); //아이디 중복검사 및 회원 등록 
 router.post('/login', login.login); //로그인
 router.post('/greeting', greeting.greeting); //기분 체크
+router.post('/dashboard', dashboard.dashboard);  //대시보드(새로운행사 카운트, 참석행사리스트, 약복용리스트)
 router.post('/drug_management', drug_management.drug_management); //복용 약 등록
 router.post('/drug_list', drug_management.show_drug_list); //복용 약 리스트
 router.post('/eventboard_regi', eventboard_regi.event_register); //이벤트 등록
@@ -30,6 +31,7 @@ router.post('/n_event_list', event.event_n_list); //new(새로운 행사,안읽�
 router.post('/d_event', event.event_d); //detail(행사 상세조회)
 router.post('/c_event', event.event_c); //checking(새로운 행사,안읽음)
 router.post('/j_event', event.event_j); //joining(참석표시)
+router.post('/j_event_list', event.event_j_list); //joining list(참석행사 리스트)
 router.post('/j_event_count', event.event_j_count); //joining count(참석자 수)
 app.use('/api', router);
 app.listen(5000);
