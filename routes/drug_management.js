@@ -1,7 +1,7 @@
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
   host     : 'localhost',
-  user     : 'root',
+  user     : 'roots',
   password : 'song',
   database : 'ddokdi_db'
 });
