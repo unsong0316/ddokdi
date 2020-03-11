@@ -26,7 +26,6 @@ exports.checking_duplication = function(req,res){
       else{
         if(results.length > 0){
           var user={
-            "USERID":req.body.payload.USERID,
             "name":req.body.payload.name,
             "id":req.body.payload.id,
             "passwords":req.body.payload.passwords,
