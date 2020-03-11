@@ -25,6 +25,13 @@ exports.checking_duplication = function(req,res){
       }
       else{
         if(results.length > 0){
+          console.log("error ocurred",error);
+          res.send({
+            "code":201,
+            "fail":"not available"
+          });         
+            }
+        else{ 
           var user={
             "name":req.body.payload.name,
             "id":req.body.payload.id,
@@ -34,27 +41,20 @@ exports.checking_duplication = function(req,res){
             "admin":req.body.payload.admin,
             "timestamp": moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
           }
-              connection.query('INSERT INTO user SET ?',user, function (error, results) {
-                if (error) {
-                  console.log("error ocurred",error);
-                  res.send({
-                    "code":400,
-                    "failed":"error ocurred"
+          connection.query('INSERT INTO user SET ?',user, function (error, results) {
+            if (error) {
+              console.log("error ocurred",error);
+              res.send({
+                "code":400,
+                "failed":"error ocurred"
+              });
+            }else{
+              console.log('The solution is: ', results);
+              res.send({
+                "code":200,
+                "success":"user registered sucessfully"
                   });
-                }else{
-                  console.log('The solution is: ', results);
-                  res.send({
-                    "code":200,
-                    "success":"user registered sucessfully"
-                      });
-                }
-                });
             }
-        else{
-          console.log("error ocurred",error);
-          res.send({
-            "code":201,
-            "success":"not available"
           });
         }
       }

@@ -74,7 +74,8 @@ exports.event_c = function(req,res){   //읽음 표시
         else{
           console.log(results);
           res.send({
-            "event_checking":results
+            "code":200,
+            "sucess":"event_c sucess"
            });
         }
       }
@@ -93,7 +94,8 @@ exports.event_j= function(req,res){ //클라이언트 참석 표시
       }
       console.log(results);
       res.send({
-        "j_event":results
+        "code":200,
+        "sucess":"event_j sucess"
       });
     }
   );   
@@ -122,7 +124,7 @@ exports.event_j_list= function(req,res){  //참석 행사 리스트(participatio
 
 exports.event_j_count = function(req,res){ //클라이언트 참석자 수 표시
   var EVENT_NO = req.body.payload.event_no    //event table에 있는 게시글 고유번호(event_no)
-  connection.query(`SELECT COUNT(participation) FROM user_event WHERE user_event_event_no = ?`, EVENT_NO,
+  connection.query(`SELECT COUNT(participation) FROM user_event WHERE user_event_event_no = ? AND participation = 1`, EVENT_NO,
   function (error, results){
       if (error){
         console.log(error);

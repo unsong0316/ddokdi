@@ -17,7 +17,7 @@ if(!error) {
 
 exports.greeting= function(req,res){
   var greeting={
-    "greeting_USERID":req.body.payload.greeting_USERID,
+    "greeting_USERID":req.body.payload.USERID,
     "mood":req.body.payload.mood,
     "message":req.body.payload.message,
     "timestamp": moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
@@ -36,7 +36,7 @@ exports.greeting= function(req,res){
       console.log('The solution is: ', results);
       res.send({
         "code":200,
-        "mood": results
+        "sucess":"mood registered sucessfully"
           });
     }
     });
