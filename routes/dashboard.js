@@ -16,7 +16,7 @@ if(!error) {
 
 exports.dashboard= function(req,res){  //새로운 행사 리스트 카운트(안읽음 = 새로운 행사)
   var USERID = req.body.payload.USERID
-      connection.query('SELECT COUNT(event_no) FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE checking = 0 AND user_event_USERID = ?)', USERID, 
+      connection.query('SELECT COUNT(event_no) AS event_count FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE checking = 0 AND user_event_USERID = ?)', USERID, 
       function(error,count_new){
         if(error){
           console.log(error);
