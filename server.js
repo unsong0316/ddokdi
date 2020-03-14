@@ -32,6 +32,7 @@ router.post('/d_event', event.event_d); //detail(행사 상세조회)
 router.post('/c_event', event.event_c); //checking(새로운 행사,안읽음)
 router.post('/j_event', event.event_j); //joining(참석표시)
 router.post('/j_event_list', event.event_j_list); //joining list(참석행사 리스트)
+router.post('/not_j_event_list', event.event_not_j_list); //not joining list(참석 체크는 안했지만 읽은것)
 router.post('/j_event_count', event.event_j_count); //joining count(참석자 수)
 app.use('/api', router);
 app.listen(5000);

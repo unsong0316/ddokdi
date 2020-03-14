@@ -15,7 +15,8 @@ if(!error) {
 });
 
 exports.event_a_list= function(req,res){ //행사 전체리스트
-    connection.query('SELECT event_no, event_name FROM event', 
+    var event_USERID = req.body.payload.USERID
+    connection.query('SELECT event_no, event_name FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE checking = 1 AND user_event_USERID = ?)', event_USERID,
       function (error, results){
         if (error){
           console.log(error);
@@ -100,6 +101,27 @@ exports.event_j= function(req,res){ //클라이언트 참석 표시
     }
   );   
     }
+
+exports.event_not_j_list= function(req,res){  //참석 행사 리스트(participation = 1 == 참석행사)
+    var event_USERID = req.body.payload.USERID
+        connection.query('SELECT event_no, event_name FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE participation = 0 AND checking = 1 AND user_event_USERID = ?)', event_USERID, 
+        function(error,results){
+          if(error){
+            console.log(error);
+        }
+          else{
+            console.log(results);
+            res.send({
+              "l_not_j_event":results
+          });
+            if (results==''){
+              console.log("notting")              
+            }
+        }  
+         
+      });
+    }
+
 
 exports.event_j_list= function(req,res){  //참석 행사 리스트(participation = 1 == 참석행사)
     var event_USERID = req.body.payload.USERID
