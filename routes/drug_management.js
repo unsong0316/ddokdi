@@ -15,7 +15,7 @@ if(!error) {
 
 exports.drug_management = function(req,res){
   var drug_management ={
-    "drug_management_USERID":req.body.payload.drug_management_USERID,
+    "drug_management_USERID":req.body.payload.USERID,
     "drug_name":req.body.payload.drug_name,
     "time": req.body.payload.time
   }
