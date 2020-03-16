@@ -34,6 +34,7 @@ router.post('/j_event', event.event_j); //joining(참석표시)
 router.post('/j_event_list', event.event_j_list); //joining list(참석행사 리스트)
 router.post('/not_j_event_list', event.event_not_j_list); //not joining list(참석 체크는 안했지만 읽은것)
 router.post('/j_event_count', event.event_j_count); //joining count(참석자 수)
+router.post('/t_event_list', event.event_t_list); //total event list(전체 리스트)
 app.use('/api', router);
 app.listen(5000);
 

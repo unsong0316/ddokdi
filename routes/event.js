@@ -14,6 +14,44 @@ if(!error) {
 }
 });
 
+
+exports.event_t_list= function(req,res){  //전체 리스트(안읽음 = 새로운 행사)
+  var event_USERID = req.body.payload.USERID
+      connection.query('SELECT event_no, event_name FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE checking = 0 AND user_event_USERID = ?)', event_USERID, 
+      function(error,l_n_event){
+        if(error){
+          console.log(error);
+      }
+        else{
+          connection.query('SELECT event_no, event_name FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE participation = 0 AND checking = 1 AND user_event_USERID = ?)', event_USERID, 
+        function(error,l_not_j_event){
+          if(error){
+            console.log(error);
+        }
+          else{            
+            connection.query('SELECT event_no, event_name FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE participation = 1 AND user_event_USERID = ?)', event_USERID, 
+            function(error,l_j_event){
+              if(error){
+                console.log(error);
+            }
+              else{
+                console.log(l_j_event);
+                console.log(l_not_j_event);
+                console.log(l_n_event);
+                res.send({
+                  "l_j_event":l_j_event,
+                  "l_not_j_event":l_not_j_event,
+                  "l_n_event":l_n_event
+              });                
+            }               
+          });
+        }
+       });
+    }
+      });
+  }
+
+
 exports.event_a_list= function(req,res){ //행사 전체리스트
     var event_USERID = req.body.payload.USERID
     connection.query('SELECT event_no, event_name FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE checking = 1 AND user_event_USERID = ?)', event_USERID,
@@ -114,9 +152,7 @@ exports.event_not_j_list= function(req,res){  //참석 행사 리스트(particip
             res.send({
               "l_not_j_event":results
           });
-            if (results==''){
-              console.log("notting")              
-            }
+           
         }  
          
       });
@@ -134,10 +170,7 @@ exports.event_j_list= function(req,res){  //참석 행사 리스트(participatio
             console.log(results);
             res.send({
               "l_j_event":results
-          });
-            if (results==''){
-              console.log("notting")              
-            }
+          });           
         }  
          
       });

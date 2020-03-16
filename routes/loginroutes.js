@@ -78,7 +78,7 @@ exports.login = function(req,res){
      // console.log('The solution is: ', results);
      if(results.length >0){
        if(results[0].passwords == passwords){
-         connection.query('SELECT USERID FROM user WHERE id = ?',[id], function (error, results) {
+         connection.query('SELECT USERID, name FROM user WHERE id = ?',[id], function (error, results) {
           if (error) {
             // console.log("error ocurred",error);
             res.send({
