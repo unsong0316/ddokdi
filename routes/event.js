@@ -176,6 +176,26 @@ exports.event_j_list= function(req,res){  //참석 행사 리스트(participatio
       });
     }
 
+exports.event_cancellation= function(req,res){ //참가 취소
+  var cancel_participation = 0
+  var USERID = req.body.payload.USERID
+  var EVENT_NO = req.body.payload.event_no    //event table에 있는 게시글 고유번호(event_no)
+  var values =[cancel_participation, USERID, EVENT_NO]
+    connection.query('UPDATE user_event SET participation = ? WHERE user_event_USERID = ? AND user_event_event_no = ?', values,
+    function (error, results){
+        if (error){
+          console.log(error);
+        }
+        console.log(results);
+        res.send({
+          "code":200,
+          "sucess":"event_cancellation_sucess"
+        });
+      }
+    );   
+      }
+//참가 취소 cancel
+
 
 exports.event_j_count = function(req,res){ //클라이언트 참석자 수 표시
   var EVENT_NO = req.body.payload.event_no    //event table에 있는 게시글 고유번호(event_no)
@@ -191,4 +211,38 @@ exports.event_j_count = function(req,res){ //클라이언트 참석자 수 표�
     }
   );   
     }
-    
+
+
+exports.event_list= function(req,res){  //event_list (참석 안함 (체킹0,1), 참석함)
+  var event_USERID = req.body.payload.USERID
+  connection.query('SELECT event_no, event_name FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE participation = 0 AND checking = 0 AND user_event_USERID = ?)', event_USERID, 
+  function(error,checking_0){
+    if(error){
+    console.log(error);
+  }
+    else{
+      connection.query('SELECT event_no, event_name FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE participation = 0 AND checking = 1 AND user_event_USERID = ?)', event_USERID, 
+      function(error,checking_1){
+        if(error){
+          console.log(error);
+        }
+        else{
+          connection.query('SELECT event_no, event_name FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE participation = 1 AND checking = 1 AND user_event_USERID = ?)', event_USERID, 
+          function(error,participation_1){
+            if(error){
+              console.log(error);
+              }
+            else{
+              console.log("event_list_done");
+              res.send({
+                "checking_0": checking_0,
+                "checking_1": checking_1,
+                "participation_1": participation_1
+          });           
+        }         
+      });             
+    }        
+  });          
+        }        
+      });
+      }
