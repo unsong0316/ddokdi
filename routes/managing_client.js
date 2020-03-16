@@ -95,7 +95,7 @@ exports.admin_client_list = function(req,res){   //읽음 표시
     connection.query('SELECT USERID FROM user WHERE admin = 1 and USERID = ?',USERID,
       function(error, results){
         if(results.length > 0){
-            connection.query('SELECT USERID, name, age FROM user WHERE admin = 0 ORDER BY name ',
+            connection.query('SELECT USERID AS Client_USERID, name, age FROM user WHERE admin = 0 ORDER BY name ',
             function (error, results){
                 if (error){
                 console.log(error);
@@ -109,6 +109,41 @@ exports.admin_client_list = function(req,res){   //읽음 표시
                 res.send({
                      "code":200,
                      "client_info_list":results
+              });
+              }
+           }
+            );
+        }
+        else{
+            console.log("error ocurred",error);
+            res.send({
+              "code":201,
+              "fail":"not available"
+            });
+        }
+});
+}
+
+exports.admin_client_details = function(req,res){   //읽음 표시
+    var USERID = req.body.payload.USERID
+    var Client_USERID = req.body.payload.Client_USERID
+    connection.query('SELECT USERID FROM user WHERE admin = 1 and USERID = ?',USERID,
+      function(error, results){
+        if(results.length > 0){
+            connection.query('SELECT USERID AS Client_USERID, name, id, passwords, gender, age, phone_no, emergency_contact, relationship_emergency_res, emergency_service FROM user WHERE USERID = ?', Client_USERID,
+            function (error, results){
+                if (error){
+                console.log(error);
+                res.send({
+                    "code":201,
+                    "fail":"not available"
+                });
+            }
+                else{
+                console.log(results);
+                res.send({
+                     "code":200,
+                     "client_info":results
               });
               }
            }

@@ -42,7 +42,7 @@ router.post('/delete_drug_list', drug_management.delete_drug_list); //event canc
 router.post('/update_emergency_service_1', managing_client.update_emergency_service_1); 
 router.post('/update_emergency_service_0', managing_client.update_emergency_service_0); 
 router.post('/admin_client_list', managing_client.admin_client_list); 
-
+router.post('/admin_client_details', managing_client.admin_client_details); 
 
 app.use('/api', router);
 app.listen(5000);
