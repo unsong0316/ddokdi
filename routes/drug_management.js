@@ -14,7 +14,7 @@ if(!error) {
 });
 
 //딜리트 쿼리 만들기
-exports.delete_drug_list= function(req,res){
+exports.delete_drug_list= function(req,res){ //약등록 삭제
   var drug_management_USERID = req.body.payload.USERID
   var drug_name = req.body.payload.drug_name
   var time = req.body.payload.time

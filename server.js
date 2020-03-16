@@ -5,6 +5,7 @@ var drug_management = require('./routes/drug_management');
 var eventboard_regi = require('./routes/eventboard_regi');
 var event = require('./routes/event');
 var dashboard = require('./routes/dashboard');
+var managing_client = require('./routes/managing_client');
 var bodyParser = require('body-parser');
 var app = express();
 app.use( bodyParser.urlencoded({ extended: true }) );
@@ -38,6 +39,10 @@ router.post('/t_event_list', event.event_t_list); //total event list(전체 리�
 router.post('/event_list', event.event_list); //event list (참석 안함 (체킹0,1), 참석함)
 router.post('/event_cancellation', event.event_cancellation); //event cancellation
 router.post('/delete_drug_list', drug_management.delete_drug_list); //event cancellation
+router.post('/update_emergency_service_1', managing_client.update_emergency_service_1); 
+router.post('/update_emergency_service_0', managing_client.update_emergency_service_0); 
+router.post('/admin_client_list', managing_client.admin_client_list); 
+
 
 app.use('/api', router);
 app.listen(5000);
