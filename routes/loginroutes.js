@@ -39,7 +39,11 @@ exports.checking_duplication = function(req,res){   // 아이디 중복검사 �
             "gender":req.body.payload.gender,
             "age": req.body.payload.age,
             "admin":req.body.payload.admin,
-            "timestamp": moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+            "timestamp": moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+            "phone_no":req.body.payload.phone_no,
+            "emergency_contact":req.body.payload.emergency_contact,
+            "relationship_emergency_res":req.body.payload.relationship_emergency_res,
+            "emergency_service":req.body.payload.emergency_service
           }
           connection.query('INSERT INTO user SET ?',user, function (error, results) {
             if (error) {
@@ -49,12 +53,40 @@ exports.checking_duplication = function(req,res){   // 아이디 중복검사 �
                 "failed":"error ocurred"
               });
             }else{
-              console.log('The solution is: ', results);
-              res.send({
-                "code":200,
-                "success":"user registered sucessfully"
-                  });
-            }
+              connection.query(`SELECT MAX(USERID) as USERID FROM user`, 
+                  function (error, USERID) {
+                    if(error) {return console.error(error);}
+                    else{
+                      var default_value = 0
+                      var create_user_event_update={
+                        "checking": default_value,
+                        "participation":default_value,
+                        "user_event_USERID": USERID[0].USERID
+                              }
+                      connection.query('INSERT INTO user_event(user_event_event_no) SELECT event_no as user_event_event_no FROM event', //1
+                        function (error, results) {
+                          if(error){return console.error(error);}
+                          else{
+                            console.log(results)
+                          // a = results
+                          // res.send({a});
+                          connection.query('UPDATE user_event SET ? where checking is NULL and participation is NULL and user_event_USERID is NULL ', create_user_event_update,//2
+                            function(error,results){
+                              if(error){return console.error(error);}
+                              else{
+                                console.log(results)
+                                res.send({
+                                  "code":200,
+                                  "success":"user registered sucessfully"
+                                });
+                        
+                        }
+                      });
+                    }
+                    });
+                  }   
+                });
+             }
           });
         }
       }

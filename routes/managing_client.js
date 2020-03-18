@@ -128,8 +128,8 @@ exports.admin_client_details = function(req,res){   //읽음 표시
     var USERID = req.body.payload.USERID
     var Client_USERID = req.body.payload.Client_USERID
     connection.query('SELECT USERID FROM user WHERE admin = 1 and USERID = ?',USERID,
-      function(error, results){
-        if(results.length > 0){
+      function(error, admin_checking){
+        if(admin_checking.length > 0){
             connection.query('SELECT USERID AS Client_USERID, name, id, passwords, gender, age, phone_no, emergency_contact, relationship_emergency_res, emergency_service FROM user WHERE USERID = ?', Client_USERID,
             function (error, results){
                 if (error){
@@ -158,3 +158,115 @@ exports.admin_client_details = function(req,res){   //읽음 표시
         }
 });
 }
+
+exports.update_emergency_service = function(req,res){   
+    var USERID = req.body.payload.USERID
+    var Client_USERID = req.body.payload.Client_USERID
+    connection.query('SELECT emergency_service AS emergency_service FROM user WHERE USERID = ?',Client_USERID,
+        function(error, emergency_service){
+            if(emergency_service[0].emergency_service =='0'){
+                connection.query('UPDATE user SET emergency_service = 1 WHERE USERID = ? ', Client_USERID,
+                function (error, results_emergency_service_to_1){
+                    if (error){
+                    console.log(error);
+                    res.send({
+                        "code":201,
+                        "fail":"not available"
+                    });
+                }
+                    else{
+                        res.send({
+                            "code":200,
+                            "success":"emergency_service is activated"
+                     });
+                    }
+            });
+        }
+            else if(emergency_service[0].emergency_service == '1'){
+                console.log(emergency_service);
+                connection.query('UPDATE user SET emergency_service = 0 WHERE USERID = ? ', Client_USERID,
+                function (error, results_emergency_service_to_0){
+                    if (error){
+                    console.log(error);
+                    res.send({
+                        "code":201,
+                        "fail":"not available"
+                    });
+                }
+                    else{
+                        res.send({
+                            "code":200,
+                            "success":"emergency_service is deactivated"
+                     });
+                    }
+            });
+            }
+            else{
+                console.log("error ocurred",error);
+                res.send({
+                    "code":201,
+                    "fail":"err"
+            });
+            }
+
+    });    
+}
+
+// exports.update_emergency_service = function(req,res){   //읽음 표시
+//     var USERID = req.body.payload.USERID
+//     var Client_USERID = req.body.payload.Client_USERID
+//     connection.query('SELECT emergency_service FROM user WHERE USERID = ?',Client_USERID,
+//         function(error, emergency_service){
+//             if(error){
+//                 console.log(error)
+//                                 }
+//                     else{
+//                         var value = emergency_service;
+//                         switch(value){
+//                             case 0 :
+//                                 connection.query('UPDATE user SET emergency_service = 1 WHERE USERID = ? ', Client_USERID,
+//                                     function (error, results_emergency_service_to_1){
+//                                         if (error){
+//                                         console.log(error);
+//                                         res.send({
+//                                             "code":201,
+//                                             "fail":"not available"
+//                                             });
+//                                         }
+//                                         else{
+//                                             res.send({
+//                                             "code":200,
+//                                             "success":"emergency_service is activated"
+//                                             });
+//                                         }
+//                                          });
+//                                         break;
+//                             case 1 :
+//                                 connection.query('UPDATE user SET emergency_service = 0 WHERE USERID = ? ', Client_USERID,
+//                                     function (error, results_emergency_service_to_0){
+//                                         if (error){
+//                                         console.log(error);
+//                                         res.send({
+//                                             "code":201,
+//                                             "fail":"not available"
+//                                         });
+//                                     }
+//                                         else{
+//                                             res.send({
+//                                                 "code":200,
+//                                                 "success":"emergency_service is deactivated"
+//                                         });
+//                                         }
+//                                 });
+//                                 break;
+//                             default : 
+//                                 res.send({
+//                                     "code":201,
+//                                     "fail":"not available2"
+//                                 });
+//                                 break;
+//                        }               
+//         } 
+//     });
+// }
+        

@@ -43,6 +43,7 @@ router.post('/update_emergency_service_1', managing_client.update_emergency_serv
 router.post('/update_emergency_service_0', managing_client.update_emergency_service_0); 
 router.post('/admin_client_list', managing_client.admin_client_list); 
 router.post('/admin_client_details', managing_client.admin_client_details); 
+router.post('/update_emergency_service', managing_client.update_emergency_service);
 
 app.use('/api', router);
 app.listen(5000);
