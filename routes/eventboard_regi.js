@@ -46,33 +46,45 @@ exports.event_register= function(req,res){
                 var user_event_event_no = connection.query(`SELECT MAX(event_no) as EVENT_NO FROM event`, 
                   function (error, EVENT_NO) {
                     if(error) {return console.error(error);}
-                    var create_user_event_update={
-                      "checking": default_value,
-                      "participation":default_value,
-                      "user_event_event_no": EVENT_NO[0].EVENT_NO
-                            }
-//1,2한줄로 합쳐보자 나중에
-                    connection.query('INSERT INTO user_event(user_event_USERID) SELECT USERID as user_event_USERID FROM user WHERE admin=0', //1
-                    function (error, results) {
-                      if(error){return console.error(error);}
-                      console.log(results)
-                      // a = results
-                      // res.send({a});
-                      connection.query('UPDATE user_event SET ? where checking is NULL and participation is NULL and user_event_event_no is NULL ', create_user_event_update,//2
-                      function(error,results){
+                    else{
+                      var event_no = EVENT_NO[0].EVENT_NO
+                    connection.query(`SELECT date as date FROM event WHERE event_no = ?`, event_no,
+                    function (error, date) {
+                      if(error) {return console.error(error);}
+                      else{
+                        var create_user_event_update={
+                        "checking": default_value,
+                        "participation":default_value,
+                        "user_event_event_no": EVENT_NO[0].EVENT_NO,
+                        "date" : date[0].date
+                              }
+  //1,2한줄로 합쳐보자 나중에
+                        connection.query('INSERT INTO user_event(user_event_USERID) SELECT USERID as user_event_USERID FROM user WHERE admin=0', //1
+                        function (error, results) {
                         if(error){return console.error(error);}
                         else{
                           console.log(results)
-                          res.send({
-                            "code":200,
-                            "success":"event registered sucessfully"
-                          })
-                        
-                        }
+                        // a = results
+                        // res.send({a});
+                          connection.query('UPDATE user_event SET ? where checking is NULL and participation is NULL and user_event_event_no is NULL ', create_user_event_update,//2
+                          function(error,results){
+                            if(error){return console.error(error);}
+                            else{
+                              console.log(results)
+                              res.send({
+                                "code":200,
+                                "success":"event registered sucessfully"
+                              })
+                          
+                          }
+                        });
+                      }                        
                       });
+                    }
                     });
+                  }
                   });
-                }  
+                  }  
         }
         );
         }
@@ -86,6 +98,25 @@ exports.event_register= function(req,res){
         }
         );
       }
+
+
+exports.delete_expire_event = function(req,res){ //약등록 삭제
+  var expire_date = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+  connection.query('DELETE FROM user_event WHERE date < ?',expire_date, 
+    function (error, results){
+      if (error){
+        console.log(error);
+      }
+      else{
+        console.log(results);
+        res.send({
+          "code":200,
+          "delete": "success"
+        });
+      }
+    }
+  );
+  }
 
 ////////////////////////////
 // var user_count = connection.query('SELECT COUNT (USERID) as USER_NO FROM user WHERE admin = 0',  //유저 수 가져오기

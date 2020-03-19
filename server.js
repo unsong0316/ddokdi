@@ -50,7 +50,7 @@ router.post('/update_emergency_service_0', managing_client.update_emergency_serv
 router.post('/admin_client_list', managing_client.admin_client_list); 
 router.post('/admin_client_details', managing_client.admin_client_details); 
 router.post('/update_emergency_service', managing_client.update_emergency_service);
-
+router.post('/delete_expire_event', eventboard_regi.delete_expire_event); // 날짜 지난 이벤트 삭제
 app.use('/api', router);
 app.listen(3000);
 
