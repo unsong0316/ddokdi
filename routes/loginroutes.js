@@ -58,16 +58,17 @@ exports.checking_duplication = function(req,res){   // 아이디 중복검사 �
                     if(error) {return console.error(error);}
                     else{
                       var default_value = 0
+                      var expire_date = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
                       var create_user_event_update={
                         "checking": default_value,
                         "participation":default_value,
                         "user_event_USERID": USERID[0].USERID
                               }
-                      connection.query('INSERT INTO user_event(user_event_event_no) SELECT event_no as user_event_event_no FROM event', //1
-                        function (error, results) {
+                      connection.query('INSERT INTO user_event(user_event_event_no,date) SELECT event_no as user_event_event_no, date FROM event WHERE date > ?', expire_date,  //1
+                        function (error, result) {
                           if(error){return console.error(error);}
                           else{
-                            console.log(results)
+                            console.log(result)
                           // a = results
                           // res.send({a});
                           connection.query('UPDATE user_event SET ? where checking is NULL and participation is NULL and user_event_USERID is NULL ', create_user_event_update,//2
