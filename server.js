@@ -1,3 +1,4 @@
+const cors = require('cors');
 var express = require("express");
 var login = require('./routes/loginroutes');
 var greeting = require('./routes/greeting');
