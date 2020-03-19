@@ -18,6 +18,11 @@ app.use(function(req, res, next) {
     next();
 });
 
+app.use(cors());
+app.use( bodyParser.urlencoded({ extended: true }) );
+app.use( bodyParser.json() );
+
+
 var router = express.Router();
 
 router.post('/register', login.checking_duplication); //아이디 중복검사 및 회원 등록 
@@ -46,7 +51,7 @@ router.post('/admin_client_details', managing_client.admin_client_details);
 router.post('/update_emergency_service', managing_client.update_emergency_service);
 
 app.use('/api', router);
-app.listen(5000);
+app.listen(3000);
 
 
 // router.post('/register', login.register);
