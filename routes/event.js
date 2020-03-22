@@ -121,24 +121,7 @@ exports.event_c = function(req,res){   //읽음 표시
     );   
 }
 
-exports.event_j= function(req,res){ //클라이언트 참석 표시
-  var participation = 1
-  var USERID = req.body.payload.USERID
-  var EVENT_NO = req.body.payload.event_no    //event table에 있는 게시글 고유번호(event_no)
-  var values =[participation, USERID, EVENT_NO]
-  connection.query('UPDATE user_event SET participation = ? WHERE user_event_USERID = ? AND user_event_event_no = ?', values,
-  function (error, results){
-      if (error){
-        console.log(error);
-      }
-      console.log(results);
-      res.send({
-        "code":200,
-        "sucess":"event_j sucess"
-      });
-    }
-  );   
-    }
+
 
 exports.event_not_j_list= function(req,res){  //참석 행사 리스트(participation = 1 == 참석행사)
     var event_USERID = req.body.payload.USERID
@@ -176,25 +159,6 @@ exports.event_j_list= function(req,res){  //참석 행사 리스트(participatio
       });
     }
 
-exports.event_cancellation= function(req,res){ //참가 취소
-  var cancel_participation = 0
-  var USERID = req.body.payload.USERID
-  var EVENT_NO = req.body.payload.event_no    //event table에 있는 게시글 고유번호(event_no)
-  var values =[cancel_participation, USERID, EVENT_NO]
-    connection.query('UPDATE user_event SET participation = ? WHERE user_event_USERID = ? AND user_event_event_no = ?', values,
-    function (error, results){
-        if (error){
-          console.log(error);
-        }
-        console.log(results);
-        res.send({
-          "code":200,
-          "sucess":"event_cancellation_sucess"
-        });
-      }
-    );   
-      }
-//참가 취소 cancel
 
 
 exports.event_j_count = function(req,res){ //클라이언트 참석자 수 표시
@@ -246,3 +210,77 @@ exports.event_list= function(req,res){  //event_list (참석 안함 (체킹0,1),
         }        
       });
       }
+
+exports.update_user_event_participation = function(req,res){   
+  var USERID = req.body.payload.USERID
+  var EVENT_NO = req.body.payload.event_no
+  var values_for_update = [USERID, EVENT_NO]
+  connection.query('SELECT participation FROM user_event WHERE user_event_USERID = ? AND user_event_event_no = ?',values_for_update,
+  function(error, participation_status){
+    if(participation_status[0].participation =='0'){
+        connection.query('UPDATE user_event SET participation = 1 WHERE user_event_USERID = ? AND user_event_event_no = ? ', values_for_update,
+        function (error, results_participation_to_1){
+            if (error){
+            console.log(error);
+            res.send({
+                "code":201,
+                "fail":"not available"
+            });
+        }
+            else{
+                console.log(results_participation_to_1);
+                res.send({
+                    "code":200,
+                    "success":"participation_status is activated"
+            });
+            }
+    });
+  }
+    else if(participation_status[0].participation == '1'){
+        console.log(participation_status);
+        connection.query('UPDATE user_event SET participation = 0 WHERE user_event_USERID = ? AND user_event_event_no = ? ', values_for_update,
+        function (error, results_participation_to_0){
+            if (error){
+            console.log(error);
+            res.send({
+                "code":202,
+                "fail":"not available"
+            });
+        }
+            else{
+                console.log(results_participation_to_0);
+                res.send({
+                    "code":200,
+                    "success":"participation_status is deactivated"
+            });
+            }
+    });
+    }
+    else{
+        console.log("error ocurred",error);
+        res.send({
+            "code":203,
+            "fail":"err"
+                  });
+              }
+            });     
+    }
+
+ 
+exports.user_event_d= function(req,res){ //행사 상세조회
+  var EVENT_NO = req.body.payload.event_no
+  var USERID = req.body.payload.USERID
+  var values_for_user_event_details = [EVENT_NO, USERID]
+  connection.query('SELECT user_event_USERID, checking, participation, user_event_event_no FROM user_event WHERE user_event_event_no = ? AND user_event_USERID =?', values_for_user_event_details,
+    function (error, results){
+        if (error){
+          console.log(error);
+        }
+        else{         
+          res.send({
+          "user_event":results
+          });
+        }
+      }
+    );
+    }
