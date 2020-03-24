@@ -115,7 +115,7 @@ exports.event_c = function(req,res){   //읽음 표시
         if(results.length > 0){ //있을때
             var timestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
             emergency_service_table_update_value = [timestamp, USERID]
-            connection.query('UPDATE timestamp SET ? where emergency_service_USERID = ? ', emergency_service_table_update_value,
+            connection.query('UPDATE emergency_service_table SET timestamp = ? where emergency_service_USERID = ? ', emergency_service_table_update_value,
                           function(error,results){
                             if(error){return console.error(error);}
                             else{
