@@ -100,7 +100,7 @@ exports.event_register= function(req,res){
       }
 
 
-exports.delete_expire_event = function(req,res){ //약등록 삭제
+exports.delete_expire_event = function(req,res){ 
   var expire_date = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
   connection.query('DELETE FROM user_event WHERE date < ?',expire_date, 
     function (error, results){

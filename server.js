@@ -8,6 +8,7 @@ var event = require('./routes/event');
 var dashboard = require('./routes/dashboard');
 var managing_client = require('./routes/managing_client');
 var bodyParser = require('body-parser');
+var moment = require('moment');
 var app = express();
 app.use( bodyParser.urlencoded({ extended: true }) );
 app.use( bodyParser.json() );

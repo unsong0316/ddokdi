@@ -54,6 +54,7 @@ exports.event_t_list= function(req,res){  //전체 리스트(안읽음 = 새로�
 
 exports.event_a_list= function(req,res){ //행사 전체리스트
     var event_USERID = req.body.payload.USERID
+    
     connection.query('SELECT event_no, event_name FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE checking = 1 AND user_event_USERID = ?)', event_USERID,
       function (error, results){
         if (error){
@@ -105,21 +106,55 @@ exports.event_c = function(req,res){   //읽음 표시
     var USERID = req.body.payload.USERID
     var EVENT_NO = req.body.payload.event_no    //event table에 있는 게시글 고유번호(event_no)
     var values =[checking, USERID, EVENT_NO]
-    connection.query('UPDATE user_event SET checking = ? WHERE user_event_USERID = ? AND user_event_event_no = ?', values,
-    function (error, results){
-        if (error){
-          console.log(error);
-        }
-        else{
-          console.log(results);
-          res.send({
-            "code":200,
-            "sucess":"event_c sucess"
-           });
-        }
+    connection.query('SELECT emergency_service_USERID FROM emergency_service_table WHERE emergency_service_USERID = ?',USERID,
+    function(error, results){
+      if (error){
+        console.log(error);
       }
-    );   
-}
+      else{
+        if(results.length > 0){ //있을때
+            var timestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+            emergency_service_table_update_value = [timestamp, USERID]
+            connection.query('UPDATE timestamp SET ? where emergency_service_USERID = ? ', emergency_service_table_update_value,
+                          function(error,results){
+                            if(error){return console.error(error);}
+                            else{
+                              connection.query('UPDATE user_event SET checking = ? WHERE user_event_USERID = ? AND user_event_event_no = ?', values,
+                              function (error, results){
+                                  if (error){
+                                    console.log(error);
+                                  }
+                                  else{
+                                    console.log(results);
+                                    res.send({
+                                      "code":200,
+                                      "sucess":"event_c sucess"
+                                    });
+                                  }
+                                }
+                              );
+                            }
+                        });
+                      }
+          else{ //없을떄
+            connection.query('UPDATE user_event SET checking = ? WHERE user_event_USERID = ? AND user_event_event_no = ?', values,
+            function (error, results){
+                if (error){
+                  console.log(error);
+                }
+                else{
+                  console.log(results);
+                  res.send({
+                    "code":200,
+                    "sucess":"event_c sucess"
+                  });
+                } 
+              }
+            );
+         }
+      }
+    });
+ }
 
 
 
@@ -179,37 +214,87 @@ exports.event_j_count = function(req,res){ //클라이언트 참석자 수 표�
 
 exports.event_list= function(req,res){  //event_list (참석 안함 (체킹0,1), 참석함)
   var event_USERID = req.body.payload.USERID
-  connection.query('SELECT event_no, event_name FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE participation = 0 AND checking = 0 AND user_event_USERID = ?)', event_USERID, 
-  function(error,checking_0){
-    if(error){
-    console.log(error);
-  }
-    else{
-      connection.query('SELECT event_no, event_name FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE participation = 0 AND checking = 1 AND user_event_USERID = ?)', event_USERID, 
-      function(error,checking_1){
-        if(error){
-          console.log(error);
-        }
-        else{
-          connection.query('SELECT event_no, event_name FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE participation = 1 AND checking = 1 AND user_event_USERID = ?)', event_USERID, 
-          function(error,participation_1){
-            if(error){
+  connection.query('SELECT emergency_service_USERID FROM emergency_service_table WHERE emergency_service_USERID = ?',USERID,
+    function(error, results){
+      if (error){
+        console.log(error);
+      }
+      else{
+        if(results.length > 0){ //있을때
+            var timestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+            emergency_service_table_update_value = [timestamp, USERID]
+            connection.query('UPDATE timestamp SET ? where emergency_service_USERID = ? ', emergency_service_table_update_value,
+                          function(error,results){
+                            if(error){return console.error(error);}
+                            else{
+                              connection.query('SELECT event_no, event_name FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE participation = 0 AND checking = 0 AND user_event_USERID = ?)', event_USERID, 
+                              function(error,checking_0){
+                                if(error){
+                                console.log(error);
+                              }
+                                else{
+                                  connection.query('SELECT event_no, event_name FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE participation = 0 AND checking = 1 AND user_event_USERID = ?)', event_USERID, 
+                                  function(error,checking_1){
+                                    if(error){
+                                      console.log(error);
+                                    }
+                                    else{
+                                      connection.query('SELECT event_no, event_name FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE participation = 1 AND checking = 1 AND user_event_USERID = ?)', event_USERID, 
+                                      function(error,participation_1){
+                                        if(error){
+                                          console.log(error);
+                                          }
+                                        else{
+                                          console.log("event_list_done");
+                                          res.send({
+                                            "checking_0": checking_0,
+                                            "checking_1": checking_1,
+                                            "participation_1": participation_1
+                                        });           
+                                      }         
+                                    });             
+                                  }        
+                                });          
+                              }        
+                        });
+                      }
+                    });
+                  }
+          else{ //없을떄
+            connection.query('SELECT event_no, event_name FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE participation = 0 AND checking = 0 AND user_event_USERID = ?)', event_USERID, 
+            function(error,checking_0){
+              if(error){
               console.log(error);
-              }
-            else{
-              console.log("event_list_done");
-              res.send({
-                "checking_0": checking_0,
-                "checking_1": checking_1,
-                "participation_1": participation_1
-          });           
-        }         
-      });             
-    }        
-  });          
-        }        
+            }
+              else{
+                connection.query('SELECT event_no, event_name FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE participation = 0 AND checking = 1 AND user_event_USERID = ?)', event_USERID, 
+                function(error,checking_1){
+                  if(error){
+                    console.log(error);
+                  }
+                  else{
+                    connection.query('SELECT event_no, event_name FROM event WHERE event_no IN(SELECT user_event_event_no AS event_no FROM user_event WHERE participation = 1 AND checking = 1 AND user_event_USERID = ?)', event_USERID, 
+                    function(error,participation_1){
+                      if(error){
+                        console.log(error);
+                        }
+                      else{
+                        console.log("event_list_done");
+                        res.send({
+                          "checking_0": checking_0,
+                          "checking_1": checking_1,
+                          "participation_1": participation_1
+                    });           
+                  }         
+                });             
+              }        
+            });          
+          }        
       });
       }
+    }
+  });
+}
 
 exports.update_user_event_participation = function(req,res){   
   var USERID = req.body.payload.USERID
@@ -271,16 +356,49 @@ exports.user_event_d= function(req,res){ //행사 상세조회
   var EVENT_NO = req.body.payload.event_no
   var USERID = req.body.payload.USERID
   var values_for_user_event_details = [EVENT_NO, USERID]
-  connection.query('SELECT user_event_USERID, checking, participation, user_event_event_no FROM user_event WHERE user_event_event_no = ? AND user_event_USERID =?', values_for_user_event_details,
-    function (error, results){
-        if (error){
-          console.log(error);
-        }
-        else{         
-          res.send({
-          "user_event":results
-          });
-        }
+  connection.query('SELECT emergency_service_USERID FROM emergency_service_table WHERE emergency_service_USERID = ?',USERID,
+    function(error, results){
+      if (error){
+        console.log(error);
       }
-    );
+      else{
+        if(results.length > 0){ //있을때
+            var timestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+            emergency_service_table_update_value = [timestamp, USERID]
+            connection.query('UPDATE timestamp SET ? where emergency_service_USERID = ? ', emergency_service_table_update_value,
+                          function(error,results){
+                            if(error){return console.error(error);}
+                            else{
+                              connection.query('SELECT user_event_USERID, checking, participation, user_event_event_no FROM user_event WHERE user_event_event_no = ? AND user_event_USERID =?', values_for_user_event_details,
+                              function (error, results){
+                                  if (error){
+                                    console.log(error);
+                                  }
+                                  else{         
+                                    res.send({
+                                    "user_event":results
+                                    });
+                                  }
+                                }
+                              );
+                            }
+                        });
+                      }
+          else{ //없을떄
+            connection.query('SELECT user_event_USERID, checking, participation, user_event_event_no FROM user_event WHERE user_event_event_no = ? AND user_event_USERID =?', values_for_user_event_details,
+            function (error, results){
+                if (error){
+                  console.log(error);
+                }
+                else{         
+                  res.send({
+                  "user_event":results
+                  });
+                }
+              }
+            );
+          }
+      }
+    });
+  
     }
