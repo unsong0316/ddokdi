@@ -66,7 +66,7 @@ exports.drug_management = function(req,res){
 
 exports.show_drug_list= function(req,res){
   var drug_management_USERID = req.body.payload.USERID
-  connection.query('SELECT emergency_service_USERID FROM emergency_service_table WHERE emergency_service_USERID = ?',USERID,
+  connection.query('SELECT emergency_service_USERID FROM emergency_service_table WHERE emergency_service_USERID = ?', drug_management_USERID,
     function(error, results){
       if (error){
         console.log(error);
@@ -75,7 +75,7 @@ exports.show_drug_list= function(req,res){
         if(results.length > 0){ //있을때
             var timestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
             emergency_service_table_update_value = [timestamp, drug_management_USERID]
-            connection.query('UPDATE timestamp SET ? where emergency_service_USERID = ? ', emergency_service_table_update_value,
+            connection.query('UPDATE emergency_service_table SET timestamp=? where emergency_service_USERID = ? ', emergency_service_table_update_value,
                           function(error,results){
                             if(error){return console.error(error);}
                             else{
