@@ -52,7 +52,7 @@ router.post('/update_emergency_service', managing_client.update_emergency_servic
 router.post('/delete_expire_event', eventboard_regi.delete_expire_event); // 날짜 지난 이벤트 삭제
 router.post('/update_user_event_participation', event.update_user_event_participation); //joining(참석업데이트)
 router.post('/user_event_d', event.user_event_d); //user_event details
-
+router.post('/checking_emergency_situation', managing_client.checking_emergency_situation); //위기상황 체크
 app.use('/api', router);
 app.listen(3000);
 
