@@ -179,7 +179,7 @@ exports.update_emergency_service = function(req,res){
                         }
                             else{
                                 console.log(results_emergency_service_to_1);
-                                connection.query('INSERT INTO emergency_service_table(emergency_service_USERID) SELECT USERID FROM user WHERE USERID = ?', Client_USERID,  
+                                connection.query('INSERT INTO emergency_service_table(emergency_service_USERID) SELECT USERID AS emergency_service_USERID FROM user WHERE USERID = ?', Client_USERID,  
                                 function (error, result) {
                                 if(error){return console.error(error);}
                                 else{
